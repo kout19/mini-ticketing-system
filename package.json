@@ -1,0 +1,31 @@
+{
+  "name": "mini-ticketing-system",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"npm run start --prefix client\" \"npm run start --prefix server\"",
+    "install:all": "npm install --workspaces"
+  },
+  "keywords": [],
+  "author": "Kefyalew",
+  "license": "ISC",
+  "description": "A mini ticketing system using the MERN stack",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kout19/mini-ticketing-system.git"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "mongoose": "^8.11.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
