@@ -1,30 +1,44 @@
 const jwt = require('jsonwebtoken');
 const User = require('../Models/user');
-const auth = async (req, res, next) => {
-    let token;
+const dotenv = require('dotenv');
 
-  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+dotenv.config();
+
+const Auth = async (req, res, next) => {
     try {
-      token = req.headers.authorization.split(' ')[1];
+        const token = req.header("Authorization")?.replace("Bearer ", "");
 
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = await User.findById(decoded.id).select('password');
-      next();
+        if (!token) {
+            return res.status(401).json({ message: "Not authorized, no token" });
+        }
+
+        // Verify the token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || "thisisminiticket"); // Make sure to use env variables
+
+        console.log("Decoded Token:", decoded);
+
+        // Fetch user from DB
+        req.user = await User.findById(decoded._id).select("role email"); // Include role explicitly
+
+        console.log("Fetched User from DB:", req.user);
+
+        if (!req.user) {
+            return res.status(401).json({ message: "Not authorized, invalid token" });
+        }
+
+        next();
     } catch (error) {
-      res.status(401).json({ message: 'Not authorized, token failed' });
+        console.error("Auth error:", error);
+        res.status(401).json({ message: "Not authorized, invalid token" });
     }
-  }
-
-  if (!token) {
-    res.status(401).json({ message: 'Not authorized, no token' });
-  }
 };
 
-const admin = (req, res, next) => {
-  if (req.user.role !== 'admin') {
-    return res.status(403).json({ message: 'Access denied' });
-  }
-  next();
+const Admin = (req, res, next) => {
+    console.log("Checking Admin Role:", req.user);
+    if (!req.user || req.user.role !== 'admin') {
+        return res.status(403).json({ message: 'Access denied. Admins only!' });
+    }
+    next();
 };
 
-module.exports = { auth, admin };
+module.exports = { Auth, Admin };

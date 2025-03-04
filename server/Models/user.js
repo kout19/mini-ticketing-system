@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const bycrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const dotenv =require('dotenv');
+dotenv.config();
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -36,20 +38,23 @@ userSchema.pre('save', async function (next) {
     }
     next();
 });
+
+
+  
+  //Generating JWT
+userSchema.methods.generateAuthToken = async function ()
+{
+    const user = this;
+    const token = jwt.sign({ _id: user._id.toString
+    () , role: user.role}, "thisisminiticket", 
+{expiresIn: '1hr'});
+    user.tokens = user.tokens.concat({ token });
+    await user.save();
+    return token;
+}
+
 userSchema.methods.matchPassword = async function (password) {
-    return await bcrypt.compare(password, this.password);
+    return await bycrypt.compare(password, this.password);
   };
-  
-  const User = mongoose.model('User', userSchema);
-  module.exports = User;
-  
-// userSchema.methods.generateAuthToken = async function ()
-// {
-//     const user = this;
-//     const token = jwt.sign({ _id: user._id.toString
-//     () }, ' thisismynewcourse');
-//     user.tokens = user.tokens.concat({ token });
-//     await user.save();
-//     return token;
-// }
-// const User = mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema);
+module.exports = User;

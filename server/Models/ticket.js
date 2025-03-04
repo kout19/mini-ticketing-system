@@ -20,7 +20,10 @@ const ticketSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    }
+    },
+    createdAt:{
+        type: Date, default: Date.now
+    },
 }); 
 const Ticket = mongoose.model('Ticket', ticketSchema);
 module.exports = Ticket;
