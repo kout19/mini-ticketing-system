@@ -36,7 +36,7 @@ const  token=jwt.sign(
    "thisisminiticket",
    {expiresIn: "1d"}
 );
-console.log(token);
+// console.log(token);
 console.log(lUser.$assertPopulatedrole);
 res.status(200).json({message:"login successfull",
     lUser,

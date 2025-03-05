@@ -13,14 +13,14 @@ const Auth = async (req, res, next) => {
         }
 
         // Verify the token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || "thisisminiticket"); // Make sure to use env variables
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || "thisisminiticket"); 
 
-        console.log("Decoded Token:", decoded);
+        // console.log("Decoded Token:", decoded);
 
         // Fetch user from DB
-        req.user = await User.findById(decoded._id).select("role email"); // Include role explicitly
+        req.user = await User.findById(decoded._id).select("role email"); 
 
-        console.log("Fetched User from DB:", req.user);
+        // console.log("Fetched User from DB:", req.user);
 
         if (!req.user) {
             return res.status(401).json({ message: "Not authorized, invalid token" });
@@ -34,7 +34,7 @@ const Auth = async (req, res, next) => {
 };
 
 const Admin = (req, res, next) => {
-    console.log("Checking Admin Role:", req.user);
+    // console.log("Checking Admin Role:", req.user);
     if (!req.user || req.user.role !== 'admin') {
         return res.status(403).json({ message: 'Access denied. Admins only!' });
     }

@@ -1,7 +1,4 @@
 import {createContext, useState,useEffect } from "react";
-import { Link } from "react-router-dom";
-
-
 export const AuthContext=createContext(null);
 const AuthProvider=({children})=>{
    const [user, setUser]=useState(null);
@@ -18,6 +15,7 @@ useEffect(()=>{
    } ;
    
 const logout=() =>{
+    localStorage.removeItem("token");
     setUser(null);
 };
 return(

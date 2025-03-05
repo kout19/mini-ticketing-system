@@ -10,7 +10,8 @@ try {
     const newTicket = new Ticket({
       title,
       description,
-      user: req.user._id
+      user: req.user._id,
+      createdAt: new Date()
     });
 
     await newTicket.save();
@@ -24,9 +25,11 @@ try {
 // Get user's own tickets (users only)
 exports.getUserTickets = async (req, res) => {
   try {
-    const tickets = await Ticket.find({ user: req.user._id });
+    const tickets = await Ticket.find({ user: req.user._id }).sort({createdAt:1});
+    // console.log("sorted tickets", tickets);
     res.json(tickets);
   } catch (error) {
+    console.log(error);
     res.status(400).json({ message: 'Error fetching tickets' });
   }
 };
@@ -39,8 +42,8 @@ exports.getAllTickets = async (req, res) => {
       return res.status(403).json({ message: "Access denied. Admins only!" });
     }
 
-    const tickets = await Ticket.find().populate("user", "name email");
-    console.log("All tickets:", tickets);
+    const tickets = await Ticket.find().populate("user", "name email").sort({createdAt:1});
+    // console.log("All tickets:", tickets);
     res.status(200).json({ message: "All tickets", tickets });
   } catch (error) {
     console.log("Error fetching tickets:", error);
@@ -52,22 +55,23 @@ exports.getAllTickets = async (req, res) => {
 // Admin can update any ticket
 exports.updateTicket = async (req, res) => {
   try {
-    const {id}=req.params;
-    const updatedTicket = await Ticket.findById(id, req.body, {new:true});
-    if (!updatedTicket) {
-      return res.status(404).json({ message: 'Ticket not found' });
-    }
-   res.status(200).json({message:"Ticket updated successfully", updatedTicket});
+    const { id } = req.params; 
+    const updatedTicket = await Ticket.findByIdAndUpdate(id, req.body, { new: true });
 
+    if (!updatedTicket) {
+      return res.status(404).json({ message: "Ticket not found" }); 
+    }
+
+    res.status(200).json({ message: "Ticket updated successfully", updatedTicket });
   } catch (error) {
-    console.log("error updating ticket",error);
+    console.error("Error updating ticket:", error); 
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
 exports.deleteTicket =async(req,res)=>{
   try{
-const id =req.params;
+const {id} =req.params;
 const deletedTicket= await Ticket.findByIdAndDelete(id);
 if(!deletedTicket){
   res.status(400).json({message: "Ticket not not found"});

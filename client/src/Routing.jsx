@@ -20,7 +20,7 @@ const Routing = () => (
             <AdminDashboard/>
         </ProtectedRoute>
         }/>
-       <Route path='/admin/tickets' element={<TicketList/>}/>
+       {/* <Route path='/admin/tickets' element={<TicketList/>}/> */}
         <Route path="/unauthorized" element={<Unauthorized/>}/>
   </Routes>
   </Router>

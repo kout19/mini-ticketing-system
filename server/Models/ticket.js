@@ -14,8 +14,8 @@ const ticketSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['open', 'in-progress', 'closed'],
-        default: 'open'
+        enum: ['pending', 'in-progress', 'approved'],
+        default: 'pending'
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
@@ -24,6 +24,8 @@ const ticketSchema = new mongoose.Schema({
     createdAt:{
         type: Date, default: Date.now
     },
-}); 
+},
+{timestamps:true},
+); 
 const Ticket = mongoose.model('Ticket', ticketSchema);
 module.exports = Ticket;

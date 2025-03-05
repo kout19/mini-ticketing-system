@@ -14,8 +14,8 @@ router.get('/', Admin, ticketController.getUserTickets);
 router.get('/admin/all',Auth, Admin, ticketController.getAllTickets);
 
 // Admin can update any ticket
-router.put('/admin/:id',  ticketController.updateTicket);
+router.put('/tickets/:id',Auth,Admin, ticketController.updateTicket);
 //Admin can delete any ticket
-router.delete('/tickets/:id', Admin, ticketController.deleteTicket);
+router.delete('/tickets/:id',Auth, Admin, ticketController.deleteTicket);
 
 module.exports = router;

@@ -11,10 +11,10 @@ export const  TicketProvider =({children})=>{
     const fetchTickets = async ()=>{
         const token= localStorage.getItem("token");
         try{
-                const response= await axios.get(`${url}/api/ticket`,{
-                 headers:{Authorization: `Bearer ${token}`}
-                });
-            setTickets(response.data);  
+        const response= await axios.get(`${url}/api/ticket`,{
+            headers:{Authorization: `Bearer ${token}`}
+        });
+         setTickets(response.data);  
         }catch(error){
             console.log("Error fetching Tickets", error);
         }
