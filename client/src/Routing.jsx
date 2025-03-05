@@ -5,7 +5,7 @@ import ProtectedRoute from './components/Protected/ProtectedRoute';
 import UserDashboard from './pages/User/UserDashboard';
 import AdminDashboard from './pages/Admin/AdminDashboard';
 import Unauthorized from './pages/Unauthorized';
-import TicketList from './components/TicketList/TicketList';
+import CreateAccount from './components/CreateAccount/CreateAccount';
 const Routing = () => (
   <Router>
   <Routes>
@@ -20,7 +20,7 @@ const Routing = () => (
             <AdminDashboard/>
         </ProtectedRoute>
         }/>
-       {/* <Route path='/admin/tickets' element={<TicketList/>}/> */}
+       <Route path='admin/dashboard/create/account' element={<CreateAccount/>}/>
         <Route path="/unauthorized" element={<Unauthorized/>}/>
   </Routes>
   </Router>

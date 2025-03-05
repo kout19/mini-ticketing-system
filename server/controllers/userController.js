@@ -18,6 +18,25 @@ exports.createUser = ( async(req,res)=>{
     res.status(501).json({message:"internal server error"});
  }
 });
+//Creating account 
+exports.createAccount = ( async(req,res)=>{
+   const {name, email, password,role}=req.body;
+try{
+   const existingUser= await user.findOne({email});
+   if(existingUser){
+     return res.status(400).json({message: "user already exist"});   
+   }
+   // const safeRole="user";
+   const newUser= new user({name, email, password, role});
+   await newUser.save();
+   const token= await newUser.generateAuthToken();
+   res.status(201).json(({message: "user rgistered successfully", newUser}));
+}catch(error)
+{
+   console.log("error occure when sginup ", error);
+   res.status(501).json({message:"internal server error"});
+}
+});
 
 exports.loginUser= async(req, res)=>{
  const {email, password}=req.body;
